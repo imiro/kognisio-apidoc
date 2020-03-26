@@ -1,0 +1,142 @@
+openapi: 3.0.0
+info:
+  title: Kognisio Core API
+  version: '1.0'
+  description: Core API for kognisio website
+servers:
+  - url: 'https://kognisio.com/api'
+paths:
+  /auth/register:
+    parameters: []
+    post:
+      summary: Register New User
+      operationId: post-auth-register
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+          description: application/json
+      description: ''
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                userName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                confirmPassword:
+                  type: string
+                mobilePhoneNumber:
+                  type: string
+                profession:
+                  type: string
+                dateOfBirth:
+                  type: string
+              required:
+                - fullName
+                - userName
+                - email
+                - password
+                - confirmPassword
+        description: A json object containing registration fields
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Login
+      operationId: post-auth-login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    token: +tZOrxiwxkOV9qm5D72NsQ==
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: application/json
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example-1: {}
+      parameters:
+        - schema:
+            type: string
+            pattern: ^application\/json$
+          in: header
+          name: Content-Type
+          description: application/json
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+            examples:
+              Contoh:
+                value:
+                  email: example@example.com
+                  password: examplePassword
+      description: |-
+        Login with email & password combination.
+
+        If successful, it returns a token with which authentication/authorization is being validated throughout the website.
+components:
+  schemas:
+    Error:
+      title: Error Message
+      type: object
+      properties:
+        message:
+          type: string
+      x-examples:
+        example-1:
+          message: Kata sandi salah
+      description: An error message
+  securitySchemes: {}
+tags:
+  - name: auth
+    description: Authentication services
